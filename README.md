@@ -1,6 +1,6 @@
 # Ebeamer JUCE modules
 
-[Estick](https://www.facebook.com/estickproject) JUCE modules, GUI and OSC shared between the [Ebeamer](https://github.com/polimi-ispl/ebeamer) and the [Ebeam](https://github.com/luca-bondi/ebeam).
+GUI and OSC JUCE modules shared between the [Ebeamer](https://github.com/polimi-ispl/ebeamer) and the [Ebeam](https://github.com/luca-bondi/ebeam).
 
 ## Contributing
 - Any contribution to the project is highly appreciated! Get in touch to know more.
