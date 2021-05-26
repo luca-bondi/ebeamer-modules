@@ -48,6 +48,7 @@ private:
     void makeLayout();
     
     void setEnergy(const Value& v);
+    void setEnergy(const std::vector<float>& v, int numRows, int numCols);
     
     const int linearArrayNumLedsPerDirection = 7;
     

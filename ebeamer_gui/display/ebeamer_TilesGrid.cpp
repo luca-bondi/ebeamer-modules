@@ -47,15 +47,13 @@ void TilesGrid::init(Value frontFacingVal, Value configVal,  Value energyVal){
 
 void TilesGrid::reset(){
     
-    const uint8 numRows = (uint8)energy.size();
-    const uint8 numCols = (uint8)energy[0].size();
-    MemoryBlock mb(2+numRows*numCols*sizeof(float));
-    float* data = (float*)((char*)mb.getData()+2);
-    mb[0] = numRows;
-    mb[1] = numCols;
-    for (auto idx=0;idx<numRows*numCols;idx++)
-        data[idx] = -100;
-    setEnergy(Value(mb));
+    const int numRows = (int)energy.size();
+    const int numCols = (int)energy[0].size();
+
+    const int numEl = numRows*numCols;
+    std::vector<float> data(numEl,-100);
+    setEnergy(data,numRows,numCols);
+    
     repaint();
 }
 
@@ -180,9 +178,19 @@ void TilesGrid::valueChanged(Value& v){
 void TilesGrid::setEnergy(const Value& v){
     
     const MemoryBlock mb = *(v.getValue().getBinaryData());
-    const float* data = (float*)((char*)mb.getData()+2);
+    
     const int numRows = mb[0];
     const int numCols = mb[1];
+    
+    const int numEl = numRows*numCols;
+    std::vector<float> data(numEl);
+    mb.copyTo(data.data(),2,numEl*sizeof(float));
+    
+    setEnergy(data,numRows,numCols);
+    
+}
+
+void TilesGrid::setEnergy(const std::vector<float>& data, int numRows, int numCols){
     
     if ((energy.size() != numRows) || (energy[0].size() != numCols)){
         energy.clear();
@@ -192,7 +200,7 @@ void TilesGrid::setEnergy(const Value& v){
     
     for (auto rowIdx=0; rowIdx < numRows; rowIdx++){
         for (auto colIdx=0; colIdx < numCols; colIdx++){
-            const float v = *(data + colIdx*numRows + rowIdx); //F-ordered matrix, Eigen format
+            const float v = data[colIdx*numRows + rowIdx]; //F-ordered matrix, Eigen format
             energy[rowIdx][colIdx] = v;
             if (isLinearArray(config)){
                 for (auto tileRowIdx = 0; tileRowIdx < linearArrayNumLedsPerDirection; tileRowIdx++)

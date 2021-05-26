@@ -100,10 +100,10 @@ void MultiChannelLedBar::reset(){
 void MultiChannelLedBar::valueChanged(Value& v){
     
     const MemoryBlock mb = *(v.getValue().getBinaryData());
-    const float* data = (float*)((char*)mb.getData()+2);
     const int numEl = mb[0]*mb[1];
-    
-    Array<float> array(data,numEl);
+    std::vector<float> data(numEl);
+    mb.copyTo(data.data(),2,numEl*sizeof(float));
+    Array<float> array(data.data(),numEl);
     
     setValues(array);
 }
