@@ -39,7 +39,8 @@ void MidiPopup::showPopupMenu() {
     if (popupArea.getX() == 0) {
         popupArea = PopupMenu::Options().getTargetScreenArea();
     }
-    m.showAt(popupArea, 0, 0, 0, 0, ModalCallbackFunction::create(sliderMenuCallback, this));
+    m.showMenuAsync(PopupMenu::Options().withTargetScreenArea(popupArea),
+                    ModalCallbackFunction::create(sliderMenuCallback, this));
 
 }
 
